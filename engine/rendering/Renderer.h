@@ -15,45 +15,50 @@
 #include "Camera.h"
 #include "Cube.h"
 
+class Window;
+
 struct RendererData
 {
-    VertexArray* m_VAO;
-    VertexBuffer* m_VBO;
-    IndexBuffer* m_IBO;
-    FrameBuffer* m_FBO;
-    Scene* m_Scene;
-    Shader* m_Shader;
-    Camera* m_Camera;
-    Cube* m_Cube;
+    std::unique_ptr<VertexArray> m_VAO;
+    std::unique_ptr<VertexBuffer> m_VBO;
+    std::unique_ptr<IndexBuffer> m_IBO;
+    std::unique_ptr<FrameBuffer> m_FBO;
+    std::unique_ptr<Scene> m_Scene;
+    std::unique_ptr<Shader> m_Shader;
+    std::unique_ptr<Camera> m_Camera;
+    std::shared_ptr<Cube> m_Cube;
 
-    glm::vec3* m_ClearColor;
+    glm::vec3 m_ClearColor;
 };
 
 class Renderer
 {
 public:
-    Renderer();
-    ~Renderer();
+    explicit Renderer(Window* window);
+    ~Renderer() = default;
 
-    static void Init();
-    static void Render();
-    static void Shutdown();
+    void Render();
+    void Shutdown();
 
-    static RendererData& GetData();
+    RendererData& GetData() { return m_Data; };
 
 private:
-    static RendererData s_Data;
+    Window* m_Window;
+    RendererData m_Data;
 
-    static void SetVariables();
-    static void LoadShaders();
-    static void SetupBuffers();
-    static void SetCallbacks();
-    static void ProcessInput(GLFWwindow* window);
+    void SetVariables();
+    void LoadShaders();
+    void SetupBuffers();
+    void SetCallbacks() const;
+    void ProcessInput(GLFWwindow* window);
 
-    static float s_DeltaTime;
-    static float s_LastFrame;
+    void OnWindowResize(int width, int height) const;
+    void OnMouseScroll(float yOffset) const;
 
-    static bool s_FirstMouse;
-    static float s_LastX;
-    static float s_LastY;
+    float m_DeltaTime = 0.0f;
+    float m_LastFrame = 0.0f;
+
+    bool m_FirstMouse = true;
+    float m_LastX = 0.0f;
+    float m_LastY = 0.0f;
 };

@@ -8,16 +8,14 @@ class Editor
 {
 public:
     Editor();
-    ~Editor();
+    ~Editor() = default;
 
-    static void Init();
-    static void Run();
-    static void Shutdown();
-
-    static Editor* GetInstance();
-    static Engine* GetEngine();
+    void Run() const;
+    
+    Engine* GetEngine() const { return m_Engine.get(); };
+    GUI* GetGUI() const { return m_GUI.get(); };
 
 private:
-    static Editor* s_Instance;
-    static Engine* s_Engine;
+    std::unique_ptr<Engine> m_Engine;
+    std::unique_ptr<GUI> m_GUI;
 };

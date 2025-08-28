@@ -1,29 +1,21 @@
 #include "Engine.h"
 
-Engine* Engine::s_Instance = nullptr;
-
 Engine::Engine()
 {
-    s_Instance = this;
+    const std::string name = "Ferx Engine";
 
-    m_Window = new Window();
-
-    Renderer::Init();
+    m_Window = std::make_unique<Window>(WindowData(name));
+    m_Renderer = std::make_unique<Renderer>(m_Window.get());
 }
 
-Engine::~Engine()
+void Engine::Run() const
 {
-    Shutdown();
-}
-
-void Engine::Run()
-{
-    Renderer::Render();
+    if (m_IsRunning) {
+        m_Renderer->Render();
+    }
 }
 
 void Engine::Shutdown()
 {
-    Renderer::Shutdown();
+    m_IsRunning = false;
 }
-
-

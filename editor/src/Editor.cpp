@@ -1,46 +1,19 @@
 #include "Editor.h"
 
-Editor* Editor::s_Instance = nullptr;
-Engine* Editor::s_Engine = nullptr;
-
 Editor::Editor()
 {
-    s_Instance = this;
-}
+    m_Engine = std::make_unique<Engine>();
 
-Editor::~Editor()
-{
-    Shutdown();
-}
-
-Editor* Editor::GetInstance()
-{
-    return s_Instance;
-}
-
-Engine* Editor::GetEngine()
-{
-    return s_Engine;
-}
-
-void Editor::Init()
-{
-    s_Engine = new Engine();
-
-    GUI::Init(s_Engine->GetWindow()->GetNativeWindow());
+    m_GUI = std::make_unique<GUI>(m_Engine.get());
 
     Run();
 }
 
-void Editor::Run()
+void Editor::Run() const
 {
-    while (!glfwWindowShouldClose(s_Engine->GetWindow()->GetNativeWindow())) {
-        s_Engine->Run();
+    while (!glfwWindowShouldClose(m_Engine->GetWindow()->GetNativeWindow())) {
+        m_Engine->Run();
         GUI::Run();
-        GUI::Render(*Renderer::GetData().m_FBO);
+        m_GUI->Render(m_Engine.get());
     }
-}
-
-void Editor::Shutdown(){
-
 }

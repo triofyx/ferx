@@ -1,9 +1,10 @@
 #pragma once
 
 #include <glad/glad.h>
-#include <iostream>
-#include <Texture.h>
 #include <glm/glm.hpp>
+#include <iostream>
+#include <memory>
+#include "Texture.h"
 
 class FrameBuffer
 {
@@ -15,13 +16,10 @@ public:
     void AttachTexture(int width, int height);
     void Bind() const;
     static void Unbind();
-    void Shutdown() const;
-
-    static FrameBuffer Create();
 
     Texture* GetFrameTexture() const;
 
 private:
     unsigned int m_FBO{}, m_RBO{};
-    Texture* m_Texture;
+    std::unique_ptr<Texture> m_Texture;
 };

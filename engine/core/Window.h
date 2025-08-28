@@ -3,15 +3,18 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <string>
+#include <functional>
 #include <iostream>
-#include <Renderer.h>
+#include <utility>
+
+class Renderer;
 
 struct WindowSize
 {
     int Width, Height;
 
-    WindowSize(): Width(0), Height(0){}
-    WindowSize(const int width, const int height): Width(width), Height(height){}
+    WindowSize() : Width(800), Height(600) {}
+    WindowSize(const int width, const int height) : Width(width), Height(height){}
 };
 
 struct WindowScale
@@ -27,31 +30,40 @@ struct WindowData
     WindowSize Size;
     WindowScale Scale;
 
-    WindowData(): Title("Ferx Engine"), Size(900, 600){}
-    WindowData(const std::string& title, const int width, const int height): Title(title), Size(width, height){};
+    explicit WindowData(std::string title): Title(std::move(title)){};
 };
 
 class Window
 {
 public:
-    Window();
-    Window(const std::string& title, int width, int height);
+    using ResizeCallback = std::function<void(int width, int height)>;
+    using ScrollCallback = std::function<void(float xOffset, float yOffset)>;
+
+    explicit Window(WindowData data);
     ~Window();
-
-    static Window Create();
-    static Window Create(const std::string& title, int width, int height);
-
-    void Init();
 
     GLFWwindow* GetNativeWindow() const;
     const std::string& GetTitle() const;
     WindowSize GetSize();
     WindowScale GetScale();
 
-	void SetWindowIcon() const;
-    void Shutdown() const;
+    void SetWindowIcon() const;
+    void SetTitle(const std::string& title);
+    void SetSize(WindowSize size);
+    void SetScale(WindowScale scale);
+    void SetResizeCallback(const ResizeCallback& callback);
+    void SetScrollCallback(const ScrollCallback& callback);
 
 private:
     GLFWwindow* m_Window{};
     WindowData m_Data;
+
+    ResizeCallback m_ResizeCallback;
+    ScrollCallback m_ScrollCallback;
+
+    void SetupCallbacks();
+
+    static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
+    static void WindowSizeCallback(GLFWwindow* window, int width, int height);
+    static void MouseScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
 };

@@ -7,12 +7,7 @@ IndexBuffer::IndexBuffer()
 
 IndexBuffer::~IndexBuffer()
 {
-    Shutdown();
-}
-
-IndexBuffer IndexBuffer::Create()
-{
-    return IndexBuffer{};
+    glDeleteBuffers(1, &m_IBO);
 }
 
 void IndexBuffer::Bind() const
@@ -24,13 +19,8 @@ void IndexBuffer::Unbind()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void IndexBuffer::SetData(int size, const void* data) const
+void IndexBuffer::SetData(const int size, const void* data) const
 {
     Bind();
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
-}
-
-void IndexBuffer::Shutdown() const
-{
-    glDeleteBuffers(1, &m_IBO);
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
 #include "KeyCodes.h"
@@ -8,10 +9,8 @@
 class Input
 {
 public:
-    static bool IsKeyPressed(KeyCode key);
+    static bool IsKeyPressed(GLFWwindow* window, KeyCode key);
 
-    static bool IsMouseButtonPressed(MouseCode button);
-    static glm::vec2 GetMousePosition();
-    static float GetMouseX();
-    static float GetMouseY();
+    static bool IsMouseButtonPressed(GLFWwindow* window, MouseCode button);
+    static glm::vec2 GetMousePosition(GLFWwindow* window);
 };

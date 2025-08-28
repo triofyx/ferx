@@ -19,10 +19,7 @@ public:
     Shader(const std::string& vPath, const std::string& fPath);
     ~Shader();
 
-    static Shader Create(const std::string& vPath, const std::string& fPath);
-
     void Use() const;
-    void Shutdown() const;
     int GetUniformLocation(const std::string& name);
 
 private:

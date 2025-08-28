@@ -26,7 +26,7 @@ Shader::Shader(const std::string& vPath, const std::string& fPath)
     }
     catch(std::ifstream::failure& e)
     {
-        std::cerr << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ::" << e.what() << std::endl;
+        std::cerr << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ::" << e.what() << std::endl;
         std::cerr << "VPATH::" << vPath << std::endl << "FPATH::" << fPath << std::endl;
     }
     const char* vShaderCode = vCode.c_str();
@@ -79,19 +79,9 @@ Shader::~Shader()
     glDeleteProgram(m_ID);
 }
 
-Shader Shader::Create(const std::string& vPath, const std::string& fPath)
-{
-    return Shader{vPath, fPath};
-}
-
 void Shader::Use() const
 {
     glUseProgram(m_ID);
-}
-
-void Shader::Shutdown() const
-{
-    glDeleteProgram(m_ID);
 }
 
 int Shader::GetUniformLocation(const std::string& name)

@@ -5,9 +5,9 @@ glm::mat4 Camera::GetViewMatrix() const
     return glm::lookAt(Position, Position + Front, Up);
 }
 
-void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
+void Camera::ProcessKeyboard(const CameraMovement direction, const float deltaTime)
 {
-    float velocity = MovementSpeed * deltaTime;
+    const float velocity = MovementSpeed * deltaTime;
     if (direction == FORWARD)
         Position += Front * velocity;
     if (direction == BACKWARD)
@@ -22,13 +22,13 @@ void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
         Position -= Up * velocity;
 }
 
-void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
+void Camera::ProcessMouseMovement(float xOffset, float yOffset, const GLboolean constrainPitch)
 {
-    xoffset *= MouseSensitivity;
-    yoffset *= MouseSensitivity;
+    xOffset *= MouseSensitivity;
+    yOffset *= MouseSensitivity;
 
-    Yaw   += xoffset;
-    Pitch += yoffset;
+    Yaw   += xOffset;
+    Pitch += yOffset;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped
     if (constrainPitch)
@@ -43,9 +43,9 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constr
     UpdateCameraVectors();
 }
 
-void Camera::ProcessMouseScroll(float yoffset)
+void Camera::ProcessMouseScroll(const float yOffset)
 {
-    Zoom -= (float)yoffset;
+    Zoom -= static_cast<float>(yOffset);
     if (Zoom < 1.0f)
         Zoom = 1.0f;
     if (Zoom > 45.0f)
@@ -55,9 +55,9 @@ void Camera::ProcessMouseScroll(float yoffset)
 void Camera::UpdateCameraVectors()
 {
     glm::vec3 front;
-    front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-    front.y = sin(glm::radians(Pitch));
-    front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+    front.x = static_cast<float>(cos(glm::radians(Yaw)) * cos(glm::radians(Pitch)));
+    front.y = static_cast<float>(sin(glm::radians(Pitch)));
+    front.z = static_cast<float>(sin(glm::radians(Yaw)) * cos(glm::radians(Pitch)));
     Front = glm::normalize(front);
     Right = glm::normalize(glm::cross(Front, WorldUp));
     Up    = glm::normalize(glm::cross(Right, Front));

@@ -7,7 +7,7 @@
 class Scene {
 public:
   Scene()=default;
-  ~Scene();
+  ~Scene()=default;
 
   void AddCube(const std::shared_ptr<Cube>& cube);
   std::shared_ptr<Cube> GetCubeByName(const std::string& name);

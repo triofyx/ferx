@@ -5,10 +5,10 @@ FrameBuffer::FrameBuffer()
 	glGenFramebuffers(1, &m_FBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 
-	m_Texture = new Texture();
+	m_Texture = std::make_unique<Texture>();
 }
 
-void FrameBuffer::AttachTexture(int width, int height)
+void FrameBuffer::AttachTexture(const int width, const int height)
 {
 	Texture::ToImage(width, height, nullptr);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_Texture->GetID(), 0);
@@ -28,27 +28,16 @@ void FrameBuffer::AttachTexture(int width, int height)
 
 FrameBuffer::~FrameBuffer()
 {
-	Shutdown();
+	glDeleteBuffers(1, &m_FBO);
+	glDeleteBuffers(1, &m_RBO);
 }
 
 Texture* FrameBuffer::GetFrameTexture() const
 {
-	return m_Texture;
+	return m_Texture.get();
 }
 
-FrameBuffer FrameBuffer::Create()
-{
-	return FrameBuffer{};
-}
-
-void FrameBuffer::Shutdown() const
-{
-	glDeleteBuffers(1, &m_FBO);
-	glDeleteBuffers(1, &m_RBO);
-	m_Texture->Shutdown();
-}
-
-void FrameBuffer::RescaleFrameBuffer(int width, int height) const
+void FrameBuffer::RescaleFrameBuffer(const int width, const int height) const
 {
 	m_Texture->Bind();
 

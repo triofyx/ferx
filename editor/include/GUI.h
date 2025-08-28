@@ -1,37 +1,37 @@
 #pragma once
 
 #define GLFW_INCLUDE_NONE
-#include "FrameBuffer.h"
 #include <GLFW/glfw3.h>
 #include <imgui.h>
-#include <string>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 #include <IconsFontAwesome6.h>
-
-struct WindowScale;
+#include <string>
+#include "Engine.h"
+#include "Window.h"
+#include "FrameBuffer.h"
 
 class GUI
 {
 public:
-    GUI();
+    explicit GUI(const Engine* engine);
     ~GUI();
 
-    static void Init(GLFWwindow* window);
-    static void LoadConfigs();
+    void LoadConfigs(const Engine* engine);
     static void Run();
-    static void Render(const FrameBuffer& sceneBuffer);
-    static void Shutdown();
+    void Render(const Engine* engine);
 
-    static void Print(const std::string& message);
+    void Print(const std::string& message);
 
     static void ShowMenu();
-    static void ShowEntities();
+    static void ShowEntities(const Engine* engine);
+    static void ShowProperties(const Engine* engine);
     static void ShowFiles();
-    static void ShowConsole();
-    static void ShowScene(const FrameBuffer& sceneBuffer);
-    static void ShowProperties();
+    void ShowConsole();
+    static void ShowScene(const Engine* engine);
 
 private:
-    static std::string s_Log;
-    static ImVec4* s_StyleColors;
-    static WindowScale s_WindowScale;
+    std::string m_Log;
+    ImVec4* m_StyleColors{};
+    WindowScale m_WindowScale;
 };

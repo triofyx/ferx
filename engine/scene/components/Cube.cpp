@@ -25,11 +25,17 @@ Cube::Cube(const std::string& cubeName)
     name = cubeName;
 }
 
-void Cube::Draw() const
+void Cube::Draw()
 {
-    *m_ModelMatrix = translate(*m_ModelMatrix, *m_Position);
-    if(length(*m_Rotation) != 0)
-        *m_ModelMatrix = rotate(*m_ModelMatrix, glm::radians(length(*m_Rotation)), normalize(*m_Rotation));
-    *m_ModelMatrix = scale(*m_ModelMatrix, *m_Scale);
+    m_ModelMatrix = glm::mat4(1.0f);
+
+    if(length(m_Position) != 0)
+        m_ModelMatrix = translate(m_ModelMatrix, m_Position);
+
+    if(length(m_Rotation) != 0)
+        m_ModelMatrix = rotate(m_ModelMatrix, glm::radians(length(m_Rotation)), normalize(m_Rotation));
+
+    if(length(m_Scale) != 0)
+        m_ModelMatrix = scale(m_ModelMatrix, m_Scale);
 }
 
